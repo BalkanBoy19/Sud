@@ -120,65 +120,39 @@ function solve(board, i, j) {
   }
 
   if (j == 9) {
+    ++i;
     j = 0;
-    return solve(board, i+1, j);
-  }
-  if (j == -1) {
+  } else if (j == -1) {
+    --i;
     j = 8;
-    return solve(board, i-1, j);
   }
 
-  if (typeof board[i][j] == "string") {
+  while (typeof board[i][j] == "string") {
     if (vorwaerts) {
-      return solve(board, i, j+1);
+      ++j;
     } else {
-      return solve(board, i, j-1);
+      --j;
+    }
+    if (j == 9) {
+      ++i;
+      j = 0;
+    } else if (j == -1) {
+      --i;
+      j = 8;
     }
   }
-
   if (typeof board[i][j] == "number") { // Nur beachten wenn Zahl sowieso nicht schon richtig (wenn selbst eingetragen im Array)
-   //print("i: " + i + ", j: " + j + ", board[i][j]: " + board[i][j]);
    for (var number = board[i][j]+1; number <= 9; number++) {
     if (isValid(i, j, number)) {
      board[i][j] = number;
      vorwaerts = true;
-     if (j == 8) {  // um in naechste Zeile zu rutschen
-      j = 0;
-      return solve(board, i+1, j);
-     } else {
-     //available.splice(isItemInArray(available, [i,j]), 1);
-      return solve(board, i, j+1);  // wichtig: nciht loeschen, wird ausgefuehrt wenn Element valide
-     }
+     return solve(board, i, j+1);
     }
    }
-
-   // Zurückgehen falls keine Zahl passt
-   board[i][j] = 0;  // aktuellen Wert resetten (wichtig!)
-   vorwaerts = false;
-   // falls man rueckwaerts geht und am Anfang kein String steht
-
-   if (j == 0) {  // kann nur Zahl sein, da vorher resettet
-    j = 8;
-    return solve(board, i-1, j);
+     board[i][j] = 0;  // aktuellen Wert resetten (wichtig!)
+     vorwaerts = false;
+     return solve(board, i, j-1);
    }
-   return solve(board, i, j-1);  // Wert davor betrachten
-  //} else {
-   if (j == 8) {  // um in naechste Zeile zu rutschen, falls am Ende eine feste Zahl steht
-    j = 0;
-    return solve(board, i+1, j); // j = 0
-   } else {
-    if (!vorwaerts) {
-     if (j == 0) {
-      j = 8;
-      return solve(board, i-1, j);
-     } else {
-      return solve(board, i, j-1);
-     }
-    } else {
-     return solve(board, i, j+1);  // ausführen wenn bereits festgelegte Zahl (richtige) auftaucht
-    }
-  }
- }
 }
 
 function isNotValidInSquare(x, y, number) {
