@@ -105,7 +105,7 @@ function isSolved() {
 }
 
 function mousePressed() {
- solve(board, 0, 0);  // bei Feld (0, 0) anfangen
+ //solve(board, 0, 0);  // bei Feld (0, 0) anfangen
 }
 
 var vorwaerts = true;
